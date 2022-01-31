@@ -5,23 +5,28 @@
  */
 package servlets;
 
+import entity.Author;
+import entity.Book;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-
-@WebServlet(name = "MyServlet", urlPatterns = {
-    "/page1",
-    "/page2",
-    "/page3",
-    
+import session.AuthorFacade;
+import session.BookFacade;
+ 
+@WebServlet(name = "ManagerServlet", urlPatterns = {
+    "/addBook", 
+    "/createBook"
 })
-public class MyServlet extends HttpServlet {
-
+public class ManagerServlet extends HttpServlet {
+    @EJB private AuthorFacade authorFacade;
+    @EJB private BookFacade bookFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,26 +40,35 @@ public class MyServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String info = "Привет от сервлета!";
-        request.setAttribute("info", info);
         String path = request.getServletPath();
         switch (path) {
-            case "/page1":
-                request.getRequestDispatcher("/page1.jsp").forward(request, response);
-                
+            case "/addBook":
+                request.setAttribute("info", "Показываем форму");
+                List<Author> authors = authorFacade.findAll();
+                request.setAttribute("authors", authors);
+                request.getRequestDispatcher("/WEB-INF/addBook.jsp").forward(request, response);
                 break;
-            case "/page2":
-                request.getRequestDispatcher("/page2.jsp").forward(request, response);
-                
-                break;
-            case "/page3":
-                request.setAttribute("info", "Это защищенная страничка");
-                request.getRequestDispatcher("/WEB-INF/page3.jsp").forward(request, response);
-                
+            case "/createBook":
+                String bookName = request.getParameter("bookName");
+                String publishedYear = request.getParameter("publishedYear");
+                String quantity = request.getParameter("quantity");
+                String[] bAuthors = request.getParameterValues("authors");
+                List<Author> bookAuthors = new ArrayList<>();
+                for (int i = 0; i < bAuthors.length; i++) {
+                    bookAuthors.add(authorFacade.find(Long.parseLong(bAuthors[i])));
+                }
+                Book newBook = new Book();
+                newBook.setBookName(bookName);
+                newBook.setAuthor(bookAuthors);
+                newBook.setPublishedYear(Integer.parseInt(publishedYear));
+                newBook.setQuantity(Integer.parseInt(quantity));
+                newBook.setCount(newBook.getQuantity());
+                bookFacade.create(newBook);
+                request.setAttribute("info", "Добавили книгу в базу");
+                request.getRequestDispatcher("/addBook").forward(request, response);
                 break;
             
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

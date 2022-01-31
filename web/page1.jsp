@@ -1,7 +1,7 @@
 <%-- 
     Document   : page1
-    Created on : 28-Jan-2022, 12:54:19
-    Author     : pupil
+    Created on : Jan 28, 2022, 12:53:50 PM
+    Author     : Pupil
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,14 +9,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>page2</title>
+        <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <p>Obichni tekst</p>
-        <a href="page2.jsp">page 2</a>
-        <br>
-        <a href="index.html">main page</a>
+        <h1>Привет от page1.jsp!</h1>
+        <a href="index.html">index</a>
         <br>
         <p>${info}</p>
     </body>

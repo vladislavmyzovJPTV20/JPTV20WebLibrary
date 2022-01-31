@@ -12,7 +12,7 @@
         <title>Page2</title>
     </head>
     <body>
-        <h1>Привет от page2!</h1>
+        <h1>Привет от page3!</h1>
         <a href="index.html">index</a>
         <br>
         <p>${info}</p>
