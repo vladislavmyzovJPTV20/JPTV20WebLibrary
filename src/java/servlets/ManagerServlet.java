@@ -21,8 +21,12 @@ import session.AuthorFacade;
 import session.BookFacade;
  
 @WebServlet(name = "ManagerServlet", urlPatterns = {
+    "/index",
     "/addBook", 
-    "/createBook"
+    "/createBook",
+    "/listBooks",
+    "/addAuthor",
+    "/createAuthor"
 })
 public class ManagerServlet extends HttpServlet {
     @EJB private AuthorFacade authorFacade;
@@ -42,6 +46,32 @@ public class ManagerServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         switch (path) {
+            case "/index":
+                request.getRequestDispatcher("/listBooks").forward(request, response);
+                break;
+            case "/listBooks":
+                request.setAttribute("info", "Показываем форму");
+                List<Book> books = bookFacade.findAll();
+                request.setAttribute("books", books);
+                request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
+                break;
+            case "/addAuthor":
+                request.setAttribute("info", "Показываем форму");
+                request.getRequestDispatcher("/WEB-INF/addAuthor.jsp").forward(request, response);
+                break;
+            case "/createAuthor":
+                String firstname = request.getParameter("firstname");
+                String lastname = request.getParameter("lastname");
+                String birthYear = request.getParameter("birthYear");
+       
+                Author newAuthor = new Author();
+                newAuthor.setFirstname(firstname);
+                newAuthor.setLastname(lastname);
+                newAuthor.setBirthYear(Integer.parseInt(birthYear));
+                request.setAttribute("info", "Добавили книгу в базу");
+                authorFacade.create(newAuthor);
+                request.getRequestDispatcher("/addAuthor").forward(request, response);
+                break;                   
             case "/addBook":
                 request.setAttribute("info", "Показываем форму");
                 List<Author> authors = authorFacade.findAll();
