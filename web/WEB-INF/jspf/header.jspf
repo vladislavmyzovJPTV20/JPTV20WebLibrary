@@ -21,7 +21,10 @@
                 <a class="nav-link active" aria-current="page" href="addBook">Добавить книгу</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="addAuthor">Добавить авторы</a>
+                <a class="nav-link active" aria-current="page" href="addAuthor">Добавить автора</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="listAuthors">Список авторов</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>

@@ -25,6 +25,7 @@ import session.BookFacade;
     "/addBook", 
     "/createBook",
     "/listBooks",
+    "/listAuthors",
     "/addAuthor",
     "/createAuthor"
 })
@@ -54,6 +55,10 @@ public class ManagerServlet extends HttpServlet {
                 List<Book> books = bookFacade.findAll();
                 request.setAttribute("books", books);
                 request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
+                break;
+            case "/listAuthors":
+                request.setAttribute("info", "Показываем форму");
+                request.getRequestDispatcher("/listAuthors.jsp").forward(request, response);
                 break;
             case "/addAuthor":
                 request.setAttribute("info", "Показываем форму");
