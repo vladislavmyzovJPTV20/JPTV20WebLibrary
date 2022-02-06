@@ -51,7 +51,7 @@ public class ManagerServlet extends HttpServlet {
                 request.getRequestDispatcher("/listBooks").forward(request, response);
                 break;
             case "/listBooks":
-                request.setAttribute("info", "Показываем форму");
+                request.setAttribute("info", "Показываем форму добавления");
                 List<Book> books = bookFacade.findAll();
                 request.setAttribute("books", books);
                 request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
