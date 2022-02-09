@@ -24,10 +24,13 @@ import session.BookFacade;
     "/index",
     "/addBook", 
     "/createBook",
+    "/editListBooks",
     "/listBooks",
+    "/editBook",
+    "/updateBook",
     "/listAuthors",
     "/addAuthor",
-    "/createAuthor"
+    "/createAuthor",
 })
 public class ManagerServlet extends HttpServlet {
     @EJB private AuthorFacade authorFacade;
@@ -56,12 +59,32 @@ public class ManagerServlet extends HttpServlet {
                 request.setAttribute("books", books);
                 request.getRequestDispatcher("/listBooks.jsp").forward(request, response);
                 break;
+                
+            case "/editListBooks":
+                List<Book> listBooks = bookFacade.findAll();
+                request.setAttribute("books", listBooks);
+                request.getRequestDispatcher("/WEB-INF/editListBooks.jsp").forward(request, response);
+                break;
+            case "/editBook":
+                String bookId = request.getParameter("bookId");
+                Book book = bookFacade.find(Long.parseLong(bookId));
+                request.setAttribute("book", book);
+                request.getRequestDispatcher("/WEB-INF/editBook.jsp").forward(request, response);
+                break;
+            case "updateBook":
+                bookId = request.getParameter("bookId");
+                String bookName = request.getParameter("bookName");
+                String[] authors = request.getParameterValues("authors");
+                Book updateBook = bookFacade.find(Long.parseLong(bookId));
+                
+                break;
             case "/listAuthors":
                 request.setAttribute("info", "Показываем форму");
                 request.getRequestDispatcher("/listAuthors.jsp").forward(request, response);
                 break;
             case "/addAuthor":
                 request.setAttribute("info", "Показываем форму");
+                request.setAttribute("activeAddAuthor", true);
                 request.getRequestDispatcher("/WEB-INF/addAuthor.jsp").forward(request, response);
                 break;
             case "/createAuthor":
@@ -81,6 +104,7 @@ public class ManagerServlet extends HttpServlet {
                 request.setAttribute("info", "Показываем форму");
                 List<Author> authors = authorFacade.findAll();
                 request.setAttribute("authors", authors);
+                request.setAttribute("activeAddBook", true);
                 request.getRequestDispatcher("/WEB-INF/addBook.jsp").forward(request, response);
                 break;
             case "/createBook":
