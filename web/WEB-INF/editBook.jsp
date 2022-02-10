@@ -10,7 +10,7 @@
     <h2 class="w-100 d-flex justify-content-center my-5">Редактировать книгу</h2>
     <p class="w-100 d-flex justify-content-center text-info">${info}</p>
     <div class="w-100 d-flex justify-content-center">
-        <div class="" style="max-width: 30rem;min-width: 30rem"
+        <div class="" style="max-width: 30rem;min-width: 30rem">
             <form action="updateBook" method="POST">
                 <div class="mb-3">
                     <label for="bookName" class="form-label">Название книги</label>
@@ -21,8 +21,12 @@
                 <div class="mb-3">
                     <label for="authors" class="form-label">Авторы</label>
                     <select name="authors"  id="authors" multiple class="form-select" aria-label="Default select example">
-                        <c:forEach var="author" items="${book.author}">
-                            <option value="${author.id}">${author.firstname} ${author.lastname}</option>
+                        <c:forEach var="entry" items="${mapAuthors}">
+                            <option value="${entry.key.id}"
+                                    <c:if test="${entry.value}">
+                                        selected
+                                    </c:if>
+                            >${entry.key.firstname} ${entry.key.lastname}</option>
                         </c:forEach>
                     </select>
                 </div>

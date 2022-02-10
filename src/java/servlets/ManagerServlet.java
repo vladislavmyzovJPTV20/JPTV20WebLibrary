@@ -10,7 +10,9 @@ import entity.Book;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +24,7 @@ import session.BookFacade;
 
 /**
  *
- * @author Melnikov
+ * @author pupil
  */
 @WebServlet(name = "ManagerServlet", urlPatterns = {
     "/index",
@@ -33,7 +35,10 @@ import session.BookFacade;
     "/editBook",
     "/updateBook",
     "/addAuthor",
-    "/createAuthor"
+    "/createAuthor",
+    "/editListAuthors",
+    "/editAuthor",
+    "/updateAuthor"
 })
 public class ManagerServlet extends HttpServlet {
     @EJB private AuthorFacade authorFacade;
@@ -101,7 +106,17 @@ public class ManagerServlet extends HttpServlet {
             case "/editBook":
                 request.setAttribute("activeEditListBooks", true);
                 String bookId = request.getParameter("bookId");
+                Map<Author,Boolean> mapAuthors = new HashMap<>();
+                List<Author> listAuthors = authorFacade.findAll();
                 Book book = bookFacade.find(Long.parseLong(bookId));
+                for (int i = 0; i < listAuthors.size(); i++) {
+                    if(book.getAuthor().contains(listAuthors.get(i))) {
+                        mapAuthors.put(listAuthors.get(i), Boolean.TRUE);
+                    }else{
+                        mapAuthors.put(listAuthors.get(i), Boolean.FALSE);
+                    }
+                }
+                request.setAttribute("mapAuthors", mapAuthors);
                 request.setAttribute("book", book);
                 request.getRequestDispatcher("/WEB-INF/editBook.jsp").forward(request, response);
                 break;
@@ -115,6 +130,12 @@ public class ManagerServlet extends HttpServlet {
                 }
                 publishedYear = request.getParameter("publishedYear");
                 quantity = request.getParameter("quantity");
+                if(bookId.isEmpty() || bookName.isEmpty() || newBookAuthorsArray.length == 0 || publishedYear.isEmpty() || quantity.isEmpty()) {
+                    request.setAttribute("info", "Заполните все поля и сделайте выбор авторов");
+                    request.setAttribute("bookId", bookId);
+                    request.getRequestDispatcher("/editBook").forward(request, response);
+                    break;
+                }
                 Book updateBook = bookFacade.find(Long.parseLong(bookId));
                 updateBook.setBookName(bookName);
                 updateBook.setQuantity(Integer.parseInt(quantity));
@@ -140,8 +161,41 @@ public class ManagerServlet extends HttpServlet {
                 request.setAttribute("info", "Автор успешно добавлен");
                 request.getRequestDispatcher("/addAuthor").forward(request, response);
                 break;
+            case "/editListAuthors":
+                request.setAttribute("activeEditListAuthors", true);
+                List<Author> NewlistAuthors = authorFacade.findAll();
+                request.setAttribute("authors", NewlistAuthors);
+                request.getRequestDispatcher("/WEB-INF/editListAuthors.jsp").forward(request, response);
+                break;
+            case "/editAuthor":
+                request.setAttribute("activeEditListAuthors", true);
+                String authorId = request.getParameter("authorId");
+                Author editAuthor = authorFacade.find(Long.parseLong(authorId));
+                request.setAttribute("author", editAuthor);
+                request.getRequestDispatcher("/WEB-INF/editAuthor.jsp").forward(request, response);
+                break;
+            case "/updateAuthor":
+                authorId = request.getParameter("authorId");
+                firstname = request.getParameter("firstname");
+                lastname = request.getParameter("lastname");
+                birthYear = request.getParameter("birthYear");
+                if(authorId.isEmpty() || firstname.isEmpty() || lastname.isEmpty() || birthYear.isEmpty()) {
+                    request.setAttribute("info", "Заполните все поля");
+                    request.setAttribute("authorId", authorId);
+                    request.getRequestDispatcher("/editAuthor").forward(request, response);
+                    break;
+                }
+                Author updateAuthor = authorFacade.find(Long.parseLong(authorId));
+                updateAuthor.setFirstname(firstname);
+                updateAuthor.setLastname(lastname);
+                updateAuthor.setBirthYear(Integer.parseInt(birthYear));
+                authorFacade.edit(updateAuthor);
+                request.setAttribute("info", "Автор изменен");
+                request.getRequestDispatcher("/editListAuthors").forward(request, response);
+                break;
         }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

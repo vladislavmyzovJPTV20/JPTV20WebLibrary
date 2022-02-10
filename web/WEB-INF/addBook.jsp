@@ -3,7 +3,7 @@
     <h2 class="w-100 d-flex justify-content-center my-5">Добавить книгу</h2>
     <p class="w-100 d-flex justify-content-center text-info">${info}</p>
     <div class="w-100 d-flex justify-content-center">
-        <div class="" style="max-width: 30rem;min-width: 30rem"
+        <div class="" style="max-width: 30rem;min-width: 30rem">
             <form action="createBook" method="POST">
                 <div class="mb-3">
                     <label for="bookName" class="form-label">Название книги</label>

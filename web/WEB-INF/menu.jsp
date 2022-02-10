@@ -1,12 +1,6 @@
-<%-- 
-    Document   : menu
-    Created on : 09-Feb-2022, 12:38:36
-    Author     : pupil
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="listBooks">JPTV20WebLibrary</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,16 +12,13 @@
                   <a class='nav-link <c:if test="${activeAddBook}">active</c:if>' aria-current="page" href="addBook">Добавить книгу</a>
               </li>
               <li class="nav-item">
-                <a class='nav-link <c:if test="${activeEditBook}">active</c:if>' aria-current="page" href="editBook">Редактировать книгу</a>
+                <a class='nav-link <c:if test="${activeEditListBooks}">active</c:if>' href="editListBooks">Редактировать книгу</a>
               </li>
               <li class="nav-item">
-                <a class='nav-link <c:if test="${activeAddAuthor}">active</c:if>' aria-current="page" href="addAuthor">Добавить автора</a>
+                <a class='nav-link <c:if test="${activeAddAuthor}">active</c:if>' href="addAuthor">Добавить автора</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="listAuthors">Список авторов</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class='nav-link <c:if test="${activeEditListAuthors}">active</c:if>' href="editListAuthors">Редактировать автора</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
